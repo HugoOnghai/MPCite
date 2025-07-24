@@ -145,11 +145,12 @@ def make_minimum_record_to_fully_release(
     site_url="https://next-gen.materialsproject.org/materials",
 ) -> Record:
     return Record(
-        product_type,
-        title,
-        persons,
-        site_ownership_code,
-        access_limitations,
-        publication_date,
-        site_url,
+        title=title,
+        product_type=product_type,
+        organizations=organizations,
+        persons=persons,
+        site_ownership_code=site_ownership_code,
+        access_limitations=access_limitations,
+        publication_date=publication_date,
+        site_url=site_url,
     )
