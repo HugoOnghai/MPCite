@@ -1,14 +1,11 @@
-# https://www.oddbird.net/2022/06/01/dependabot-single-pull-request/
-name: upgrade dependencies
-
+name: upgrade dependencies # https://www.oddbird.net/2022/06/01/dependabot-single-pull-request/
 on:
   push:
-    branches: [upgrade-dependencies] # temporary on criterion for testing the workflow
+    branches: [master, update-dependencies] # temporary on criterion for testing the workflow
   workflow_dispatch: # Allow running on-demand
   schedule:
     # Runs every Monday at 8:00 UTC (4:00 Eastern)
     - cron: "0 8 * * 1"
-
 jobs:
   upgrade:
     name: ${{ matrix.package }} (${{ matrix.os }}/py${{ matrix.python-version }})
