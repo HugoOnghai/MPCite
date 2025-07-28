@@ -54,6 +54,18 @@ jobs:
           ELINK_REVIEW_ENDPOINT: ${{ secrets.ELINK_REVIEW_ENDPOINT }}
         run: uv run pytest tests
 
+      - name: merge changes # the github workflow will exit if tests fail so no need for conditions
+        id: merge
+        shell: bash
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add uv.lock
+          git commit --allow-empty -m "update dependencies for ${{ matrix.package }} (${{ matrix.os }}/py${{ matrix.python-version }})"
+          git push -f origin ${{ github.ref_name }}:auto-dependency-upgrades-${{ matrix.package }}-${{ matrix.os }}-py${{ matrix.python-version }}
+
+        
+
       # - name: commit & push changes
       #   if: steps.changes.outputs.count > 0 || steps.changes.outputs.files > 0
       #   shell: bash
