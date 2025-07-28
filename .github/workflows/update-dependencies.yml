@@ -42,8 +42,8 @@ jobs:
         id: changes
         shell: bash
         run: |
-          echo "count=$(git diff-index HEAD mpcite/uv.lock | wc -l | xargs)" >> $GITHUB_OUTPUT
-          echo "files=$(git ls-files --exclude-standard --others mpcite/uv.lock | wc -l | xargs)" >> $GITHUB_OUTPUT
+          echo "count=$(git diff-index HEAD uv.lock | wc -l | xargs)" >> $GITHUB_OUTPUT
+          echo "files=$(git ls-files --exclude-standard --others uv.lock | wc -l | xargs)" >> $GITHUB_OUTPUT
     
       - name: Test Changes # see if the project, with the changes, passes the testing workflow
         id: tests
