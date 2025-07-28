@@ -34,7 +34,7 @@ jobs:
 
       - name: Install updated packages with uv # using uv.lock as a requirements.txt
         run: |
-            uv sync --upgrade --locked --all-extras --dev 
+            uv sync --upgrade --all-extras --dev 
             uv lock
 
       - name: Detect changes
