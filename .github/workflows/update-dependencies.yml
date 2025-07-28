@@ -54,7 +54,7 @@ jobs:
           ELINK_REVIEW_ENDPOINT: ${{ secrets.ELINK_REVIEW_ENDPOINT }}
         run: uv run pytest tests
 
-      - name: push changes # the github workflow will exit if tests fail so no need for conditions
+      - name: push & merge changes # the github workflow will exit if tests fail so no need for conditions
         id: push
         shell: bash
         run: |
