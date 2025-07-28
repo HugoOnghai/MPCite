@@ -63,7 +63,7 @@ jobs:
           git add uv.lock
           git commit --allow-empty -m "update dependencies for ${{ matrix.package }} (${{ matrix.os }}/py${{ matrix.python-version }})"
           git push -f origin ${{ github.ref_name }}:auto-dependency-upgrades-${{ matrix.package }}-${{ matrix.os }}-py${{ matrix.python-version }}
-          git merge auto-dependency-upgrades-${{ matrix.package }}-${{ matrix.os }}-py${{ matrix.python-version }}
+          git merge origin/auto-dependency-upgrades-${{ matrix.package }}-${{ matrix.os }}-py${{ matrix.python-version }}
         # decided to just merge, assuming everything will work after the tests. no need for pull request
 
       # - name: commit & push changes
