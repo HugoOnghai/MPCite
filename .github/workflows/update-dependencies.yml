@@ -36,6 +36,8 @@ jobs:
         # this updates the lock file and then downloads/syncs the project with the updated lock file requirements NOT CURRENT WORKING...
         shell: bash
         run: |
+            uv sync
+
             deps=$(sed -n '/^\s*dependencies\s*=\s*\[/,/^\s*]/p' pyproject.toml | \
             grep -vE '^\s*dependencies\s*=\s*\[|^\s*\]' | \
             sed -E 's/[",]//g' | \
