@@ -14,11 +14,11 @@ maintainers = [
 ]
 requires-python = ">=3.11"
 dependencies = [
-    "elinkapi==0.4.7",
-    "pydantic",
-    "pymongo",
-    "python-dotenv",
-    "ruff",
+    "elinkapi>=0.4.9",
+    "pydantic>=2.11.7",
+    "pymongo>=4.13.2",
+    "python-dotenv>=1.1.1",
+    "ruff>=0.12.6",
     "toml-cli>=0.8.1",
 ]
 
