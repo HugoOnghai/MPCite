@@ -46,28 +46,38 @@ jobs:
         id: changes
         shell: bash
         run: |
-          echo "count=$(git diff-index HEAD uv.lock | wc -l | xargs)" >> $GITHUB_OUTPUT
-          echo "files=$(git ls-files --exclude-standard --others uv.lock | wc -l | xargs)" >> $GITHUB_OUTPUT
+          if git diff --exit-code --quiet uv.lock; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
     
       - name: Test Changes # see if the project, with the changes, passes the testing workflow
         id: tests
-        if: steps.changes.outputs.count > 0 || steps.changes.outputs.files > 0
+        if: steps.changes.outputs.changed == 'true'
         env:
           elink_api_PRODUCTION_key: ${{ secrets.ELINK_PRODUCTION_API_TOKEN }}
           elink_review_api_token: ${{ secrets.ELINK_REVIEW_API_TOKEN }}
           ELINK_REVIEW_ENDPOINT: ${{ secrets.ELINK_REVIEW_ENDPOINT }}
         run: uv run pytest tests
 
-      - name: push & merge changes # the github workflow will exit if tests fail so no need for conditions
+      - name: push & merge changes # the github workflow will exit if tests fail so no need for conditions, but we can add them anyways
         id: push
+        if: steps.changes.outputs.changed == 'true'
         shell: bash
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git add uv.lock
-          git commit --allow-empty -m "update dependencies for ${{ matrix.package }} (${{ matrix.os }}/py${{ matrix.python-version }})"
-          git push -f origin ${{ github.ref_name }}:auto-dependency-upgrades-${{ matrix.package }}-${{ matrix.os }}-py${{ matrix.python-version }}
-          git merge origin/auto-dependency-upgrades-${{ matrix.package }}-${{ matrix.os }}-py${{ matrix.python-version }}
+
+          branch="auto-dependency-upgrades-${{ matrix.os }}-py${{ matrix.python-version }}"
+          git switch -C $branch
+
+          git add uv.lock pyproject.toml
+          git commit -m "update dependencies for ${{ matrix.package }} (${{ matrix.os }}/py${{ matrix.python-version }})"
+          git push origin $branch
+
+          git checkout ${{ github.ref_name }}
+          git merge --no-ff origin/$branch
         # decided to just merge, assuming everything will work after the tests. no need for pull request
 
       # - name: commit & push changes
