@@ -33,10 +33,14 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Install updated packages with uv # using uv.lock as a requirements.txt
-        # this updates the lock file and then downloads/syncs the project with the updated lock file requirements
+        # this updates the lock file and then downloads/syncs the project with the updated lock file requirements NOT CURRENT WORKING...
         run: |
             uv lock --upgrade
             uv sync
+
+      - name: List installed packages
+        run: |
+            uv pip list
 
       - name: Detect changes # see what changed in the lock file
         id: changes
