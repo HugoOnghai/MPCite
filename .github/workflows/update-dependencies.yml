@@ -90,6 +90,7 @@ jobs:
           git checkout ${{ github.ref_name }}
           git status
           git merge --no-ff origin/$branch
+          git push origin ${{ github.ref_name }}
         # decided to just merge, assuming everything will work after the tests. no need for pull request
 
       # - name: commit & push changes
