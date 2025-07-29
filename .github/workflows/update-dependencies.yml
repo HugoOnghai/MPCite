@@ -34,9 +34,16 @@ jobs:
 
       - name: Install updated packages with uv # using uv.lock as a requirements.txt
         # this updates the lock file and then downloads/syncs the project with the updated lock file requirements NOT CURRENT WORKING...
+        shell: bash
         run: |
-            uv lock --upgrade
-            uv sync
+            deps=$(sed -n '/^\s*dependencies\s*=\s*\[/,/^\s*]/p' pyproject.toml | \
+            grep -vE '^\s*dependencies\s*=\s*\[|^\s*\]' | \
+            sed -E 's/[",]//g' | \
+            sed -E 's/[<>=!~].*//' | \
+            grep -vE '^\s*$' | \
+            xargs)
+
+            bash -c "uv remove $deps && uv add $deps"
 
       - name: List installed packages
         run: |
